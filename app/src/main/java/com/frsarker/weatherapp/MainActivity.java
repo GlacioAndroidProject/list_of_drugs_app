@@ -5,29 +5,48 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.frsarker.weatherapp.data.Data;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements AdapterView.OnItemSelectedListener {
 
-    String CITY = "dhaka,bd";
-    String API = "8118ed6ee68db2debfaaa5a44c832918";
+    String API = "1d63739b3baea8764be63a6dfad3f68d";
 
-    TextView addressTxt, updated_atTxt, statusTxt, tempTxt, temp_minTxt, temp_maxTxt, sunriseTxt,
-            sunsetTxt, windTxt, pressureTxt, humidityTxt;
+    ArrayList<String>CITY_CODES;
+    TextView addressTxt, updated_atTxt, statusTxt, tempTxt, temp_minTxt, temp_maxTxt, sunriseTxt, sunsetTxt, windTxt, pressureTxt, humidityTxt;
 
+    Spinner spiner_citys;
+    String selectCityCode= "Hà Nội";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FindById();
+    }
 
-        addressTxt = findViewById(R.id.address);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        CITY_CODES = InitialCityCode();
+        SetAdapterSpinnerCitys(CITY_CODES);
+
+    }
+    private void FindById(){
+        spiner_citys = findViewById(R.id.address);
+        spiner_citys.setOnItemSelectedListener(this);
         updated_atTxt = findViewById(R.id.updated_at);
         statusTxt = findViewById(R.id.status);
         tempTxt = findViewById(R.id.temp);
@@ -38,11 +57,38 @@ public class MainActivity extends AppCompatActivity {
         windTxt = findViewById(R.id.wind);
         pressureTxt = findViewById(R.id.pressure);
         humidityTxt = findViewById(R.id.humidity);
-
-        new weatherTask().execute();
-
     }
 
+    private void SetAdapterSpinnerCitys(ArrayList<String> citiesCode){
+
+        ArrayAdapter spinnerAdapter = new ArrayAdapter(this,R.layout.simple_spinner_item_custom, citiesCode);
+
+        spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
+        // Set the ArrayAdapter (ad) data on the
+        // Spinner which binds data to spinner
+        spiner_citys.setAdapter(spinnerAdapter);
+    }
+    private ArrayList<String> InitialCityCode(){
+        ArrayList<String>cities_code= new ArrayList<>();
+        String []citys = Data.city_list_String.split(",");
+        for (String city: citys){
+            String city_str = city.trim();
+            if(!city_str.isEmpty())
+                cities_code.add(city_str);
+        }
+        return  cities_code;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        selectCityCode = spiner_citys.getAdapter().getItem(position).toString();
+        new weatherTask().execute();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 
     class weatherTask extends AsyncTask<String, Void, String> {
         @Override
@@ -56,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected String doInBackground(String... args) {
-            String response = HttpRequest.excuteGet("https://api.openweathermap.org/data/2.5/weather?q=" + CITY + "&units=metric&appid=" + API);
+            String response = HttpRequest.excuteGet("https://api.openweathermap.org/data/2.5/weather?q=" + selectCityCode+ Data.contryCode + "&units=metric&appid=" + API);
             return response;
         }
 
@@ -88,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 /* Populating extracted data into our views */
-                addressTxt.setText(address);
+                //addressTxt.setText(address);
                 updated_atTxt.setText(updatedAtText);
                 statusTxt.setText(weatherDescription.toUpperCase());
                 tempTxt.setText(temp);
@@ -106,8 +152,11 @@ public class MainActivity extends AppCompatActivity {
 
 
             } catch (JSONException e) {
+                //findViewById(R.id.loader).setVisibility(View.GONE);
+                //findViewById(R.id.errorText).setVisibility(View.VISIBLE);
                 findViewById(R.id.loader).setVisibility(View.GONE);
-                findViewById(R.id.errorText).setVisibility(View.VISIBLE);
+                findViewById(R.id.mainContainer).setVisibility(View.VISIBLE);
+                Toast.makeText(getApplicationContext(), "Không tìm thấy dữ liệu của thành phố này", Toast.LENGTH_LONG).show();
             }
 
         }

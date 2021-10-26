@@ -19,12 +19,23 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
+            <!--Spinner widget-->
+            <Spinner
                 android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="DHAKA, BD"
+                android:layout_width="160dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:textSize="24dp" />
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/address"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="DHAKA, BD"-->
+            <!--                android:textSize="24dp" />-->
 
             <TextView
                 android:id="@+id/updated_at"
@@ -319,7 +330,7 @@
                         android:id="@+id/about"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="frsarker"
+                        android:text="Glacio"
                         android:textSize="14dp" />
                 </LinearLayout>
             </LinearLayout>
