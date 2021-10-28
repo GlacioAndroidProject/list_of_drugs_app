@@ -82,10 +82,15 @@ public class MedicineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
     private void populateItemRows(MedicineAdapter.ItemViewHolder viewHolder, final int position) {
         final Medicine_object medicine_object = medicine_objects.get(position);
+
         viewHolder.medicine_name.setText(medicine_object.getName());
+        //viewHolder.medicine_name.setSelected(true);
         viewHolder.medicine_content.setText(medicine_object.getContent());
+        viewHolder.medicine_content.setSelected(true);
         viewHolder.medicine_type.setText(medicine_object.getType());
         viewHolder.medicine_uses.setText(medicine_object.getUses());
+        viewHolder.medicine_uses.setSelected(true);
+
         // get input stream
         InputStream ims = null;
         try {
