@@ -21,6 +21,6 @@
     android:id="@android:id/text1"
     android:singleLine="true"
     android:layout_width="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/spinnerColor"
     android:layout_height="30dp"
     android:ellipsize="marquee"/>

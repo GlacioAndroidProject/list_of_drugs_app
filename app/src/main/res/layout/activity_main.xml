@@ -11,21 +11,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="15">
 
         <LinearLayout
             android:id="@+id/addressContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:gravity="center"
             android:background="@drawable/border_squard_black"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp">
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/select_medicine"
+                />
             <!--Spinner widget-->
             <Spinner
                 android:id="@+id/spinnerMediacineType"
-                android:layout_width="match_parent"
 
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
@@ -36,7 +47,9 @@
         </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="14"
+            android:layout_marginTop="20dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"

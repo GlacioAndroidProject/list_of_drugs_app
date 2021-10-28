@@ -56,7 +56,7 @@ public class FileManager {
                             count++;
                         }
                         else if (count == 1){
-                            medicine_object.setType(line);
+                            medicine_object.setType(line.trim());
                             count++;
                         }
                         else if (count == 2){

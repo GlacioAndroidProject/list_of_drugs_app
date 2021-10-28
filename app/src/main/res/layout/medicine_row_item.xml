@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:id="@+id/ln_row_item"
         android:weightSum="8">
         <RelativeLayout
             android:layout_width="0dp"
@@ -49,6 +50,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/medicine_name"
                     android:layout_weight="1"
+                    android:textStyle="bold"
                     />
                 <TextView
                     android:layout_width="0dp"
@@ -81,6 +83,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/medicine_type"
                     android:layout_weight="1"
+                    android:textStyle="bold"
                     />
                 <TextView
                     android:layout_width="0dp"
@@ -109,6 +112,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/medicine_content"
                     android:layout_weight="1"
+                    android:textStyle="bold"
                     />
                 <TextView
                     android:layout_width="0dp"
@@ -137,6 +141,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/medicine_uses"
                     android:layout_weight="1"
+                    android:textStyle="bold"
 
                     />
                 <TextView
