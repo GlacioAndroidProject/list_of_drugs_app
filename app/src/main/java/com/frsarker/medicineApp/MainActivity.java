@@ -8,9 +8,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.frsarker.medicineApp.data.Medicine_object;
 import com.frsarker.medicineApp.model.FileManager;
 
 import org.json.JSONException;
@@ -25,9 +25,11 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
 
     ArrayList<String>medicineTypes;
+    ArrayList<Medicine_object> medicine_objects, medicineObjectsForShow;
+    Spinner spinnerMediacineType;
+    String selectMediacineType;
 
-    Spinner spiner_citys;
-    String selectCityCode= "Hà Nội";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,13 +40,13 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     @Override
     protected void onStart() {
         super.onStart();
-        medicineTypes = InitialCityCode();
+        InitialCityCode();
         SetAdapterSpinnerCitys(medicineTypes);
 
     }
     private void FindById(){
-        spiner_citys = findViewById(R.id.address);
-        spiner_citys.setOnItemSelectedListener(this);
+        spinnerMediacineType = findViewById(R.id.spinnerMediacineType);
+        spinnerMediacineType.setOnItemSelectedListener(this);
     }
 
     private void SetAdapterSpinnerCitys(ArrayList<String> citiesCode){
@@ -54,26 +56,20 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
         // Set the ArrayAdapter (ad) data on the
         // Spinner which binds data to spinner
-        spiner_citys.setAdapter(spinnerAdapter);
-    }
-    private ArrayList<String> InitialCityCode(){
-        ArrayList<String>cities_code= new ArrayList<>();
-        FileManager fileManager = new FileManager(getApplicationContext());
-        String medicineImageFolderPath = fileManager.GetMedicineImageFolderPath();
-        String medicineInfoFolderPath = fileManager.GetMedicineInfoFolderPath();
+        spinnerMediacineType.setAdapter(spinnerAdapter);
 
-//        String [] citys = Data.city_list_String.split(",");
-//        for (String city: citys){
-//            String city_str = city.trim();
-//            if(!city_str.isEmpty())
-//                cities_code.add(city_str);
-//        }
-        return  cities_code;
+    }
+    private void InitialCityCode(){
+        FileManager fileManager = new FileManager(getApplicationContext());
+        ArrayList<Medicine_object> medicine_objects = fileManager.ReadMediacineInfoFromFile();
+        medicineTypes = GetListMediacineType(medicine_objects);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        selectCityCode = spiner_citys.getAdapter().getItem(position).toString();
+        selectMediacineType = spinnerMediacineType.getAdapter().getItem(position).toString();
+        medicineObjectsForShow = GetListForShow(selectMediacineType);
+
         new weatherTask().execute();
     }
 
@@ -81,6 +77,23 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+    private ArrayList<String>GetListMediacineType(ArrayList<Medicine_object> medicine_objects){
+        ArrayList<String> listMediacineTypes = new ArrayList<>();
+        for (Medicine_object medicine_object: medicine_objects){
+            if(!listMediacineTypes.contains(medicine_object.getType()))
+                listMediacineTypes.add(medicine_object.getType());
+        }
+        return  listMediacineTypes;
+    }
+    private ArrayList<Medicine_object> GetListForShow(String selectType){
+        ArrayList<Medicine_object> medicine_objects_for_show= new ArrayList<>();
+        for (Medicine_object medicine_object: medicine_objects){
+            if(medicine_object.getType() == selectType)
+                medicine_objects_for_show.add(medicine_object);
+        }
+        return medicine_objects_for_show;
+    }
+
 
     class weatherTask extends AsyncTask<String, Void, String> {
         @Override
@@ -93,7 +106,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         }
 
         protected String doInBackground(String... args) {
-            String response ="" ;//= HttpRequest.excuteGet("https://api.openweathermap.org/data/2.5/weather?q=" + selectCityCode+ Data.contryCode + "&units=metric&appid=" + API);
+            String response ="" ;//= HttpRequest.excuteGet("https://api.openweathermap.org/data/2.5/weather?q=" + selectMediacineType+ Data.contryCode + "&units=metric&appid=" + API);
             return response;
         }
 
@@ -152,4 +165,6 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
         }
     }
+
+
 }

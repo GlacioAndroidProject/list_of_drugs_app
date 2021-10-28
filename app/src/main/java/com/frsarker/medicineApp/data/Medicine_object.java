@@ -2,8 +2,9 @@ package com.frsarker.medicineApp.data;
 
 public class Medicine_object {
     private String name;
-    private String description;
     private String type;
+    private String content;
+    private String uses;
     private String ImageUrl;
 
     public String getName() {
@@ -12,14 +13,6 @@ public class Medicine_object {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public void setType(String type) {
@@ -36,5 +29,21 @@ public class Medicine_object {
 
     public void setImageUrl(String imageUrl) {
         ImageUrl = imageUrl;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getUses() {
+        return uses;
+    }
+
+    public void setUses(String uses) {
+        this.uses = uses;
     }
 }
