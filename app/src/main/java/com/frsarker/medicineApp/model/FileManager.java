@@ -44,6 +44,7 @@ public class FileManager {
                     String line;
                     while ((line = br.readLine())!= null) {
                         if(count == 0){
+                            medicine_object = new Medicine_object();
                             medicine_object.setName(line);
                             for (String imagePath: medicineImageFiles){
                                 if(imagePath.contains(medicine_object.getName()))
@@ -54,7 +55,7 @@ public class FileManager {
                             }
                             count++;
                         }
-                        else if (count ==1){
+                        else if (count == 1){
                             medicine_object.setType(line);
                             count++;
                         }

@@ -1,6 +1,7 @@
 package com.frsarker.medicineApp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
 
     ArrayList<String>medicineTypes;
-    ArrayList<Medicine_object> medicine_objects, medicineObjectsForShow;
+    ArrayList<Medicine_object> medicine_objects, medicineObjectsForShow = new ArrayList<>();
     Spinner spinnerMediacineType;
     String selectMediacineType;
     MedicineAdapter medicineAdapter;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     protected void onStart() {
         super.onStart();
         InitialCityCode();
-        SetAdapterSpinnerCitys(medicineTypes);
+        SetAdapterSpinnerMedicineType(medicineTypes);
         SetAdapterForRecycleView();
 
     }
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         recyclerView = findViewById(R.id.recyclerView);
     }
 
-    private void SetAdapterSpinnerCitys(ArrayList<String> citiesCode){
+    private void SetAdapterSpinnerMedicineType(ArrayList<String> citiesCode){
 
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this,R.layout.simple_spinner_item_custom, citiesCode);
 
@@ -65,13 +66,15 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     }
 
     private  void SetAdapterForRecycleView(){
-        medicineAdapter = new MedicineAdapter(getApplicationContext(), medicineObjectsForShow);
+        medicineAdapter = new MedicineAdapter(this, medicineObjectsForShow);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setAdapter(medicineAdapter);
     }
     private void InitialCityCode(){
         FileManager fileManager = new FileManager(getApplicationContext());
         medicine_objects = fileManager.ReadMediacineInfoFromFile();
         medicineTypes = GetListMediacineType(medicine_objects);
+
     }
 
     @Override
@@ -80,6 +83,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         medicineObjectsForShow = GetListForShow(selectMediacineType);
         if (medicineObjectsForShow == null)
             return;
+        medicineAdapter.SetMedicineObject(medicineObjectsForShow);
         medicineAdapter.notifyDataSetChanged();
     }
 
@@ -91,7 +95,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         ArrayList<String> listMediacineTypes = new ArrayList<>();
         for (Medicine_object medicine_object: medicine_objects){
             if(!listMediacineTypes.contains(medicine_object.getType()))
-                listMediacineTypes.add(medicine_object.getType());
+                listMediacineTypes.add(medicine_object.getType().trim());
         }
         return  listMediacineTypes;
     }
@@ -100,7 +104,8 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         if(medicine_objects == null)
             return null;
         for (Medicine_object medicine_object: medicine_objects){
-            if(medicine_object.getType() == selectType)
+            String type = medicine_object.getType();
+            if(medicine_object.getType().contains(selectType))
                 medicine_objects_for_show.add(medicine_object);
         }
         return medicine_objects_for_show;

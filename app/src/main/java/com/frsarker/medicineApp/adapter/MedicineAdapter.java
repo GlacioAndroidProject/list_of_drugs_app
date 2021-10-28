@@ -33,6 +33,9 @@ public class MedicineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public interface OnItemClickListener {
         void onItemClick(View itemView, int position);
     }
+    public void SetMedicineObject(ArrayList<Medicine_object> medicine_objects){
+        this.medicine_objects = medicine_objects;
+    }
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
@@ -40,13 +43,13 @@ public class MedicineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.medicine_row_item, parent, true);
-        return new ItemViewHolder(view);    }
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.medicine_row_item, parent, false);
+        return new MedicineAdapter.ItemViewHolder(view);    }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ItemViewHolder) {
-            populateItemRows((ItemViewHolder) holder, position);
+        if (holder instanceof MedicineAdapter.ItemViewHolder) {
+            populateItemRows((MedicineAdapter.ItemViewHolder) holder, position);
         }
     }
 
@@ -77,7 +80,7 @@ public class MedicineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         }
     }
-    private void populateItemRows(ItemViewHolder viewHolder, final int position) {
+    private void populateItemRows(MedicineAdapter.ItemViewHolder viewHolder, final int position) {
         final Medicine_object medicine_object = medicine_objects.get(position);
         viewHolder.medicine_name.setText(medicine_object.getName());
         viewHolder.medicine_content.setText(medicine_object.getContent());
@@ -86,6 +89,12 @@ public class MedicineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         // get input stream
         InputStream ims = null;
         try {
+            System.out.println("Imageurl: "+ medicine_object.getImageUrl());
+            if(medicine_object.getImageUrl()==null)
+            {
+                viewHolder.medicine_image.setImageResource(R.drawable.missing_image);
+                return;
+            }
             ims = context.getAssets().open(medicine_object.getImageUrl());
             // load image as Drawable
             Drawable image = Drawable.createFromStream(ims, null);
