@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Weather App</string>
+    <string name="medicine_name">Tên thuốc: </string>
+    <string name="medicine_type">Loại thuốc: </string>
+    <string name="medicine_content">Thành phần: </string>
+    <string name="medicine_uses">Công dụng</string>
 </resources>

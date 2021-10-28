@@ -6,11 +6,12 @@
     android:orientation="vertical"
     android:padding="25dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/addressContainer"
@@ -31,9 +32,19 @@
                 android:textSize="24dp" />
 
         </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none" />
+        </RelativeLayout>
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
     <ProgressBar
